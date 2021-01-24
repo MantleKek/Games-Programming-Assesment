@@ -10,19 +10,6 @@ Map random generation
 
 """
 
-valid_commands = {
-    'shoot': ('shoot', 'fire', 'gun'),
-    'laser': ('laser','zap'),
-    'missile': ('missile','explode'),
-    'warp': ('warp','jump'),
-    'power': ('power','management','redirect','divert','reroute')
-}
-
-player_data = {
-    'name': '',
-    'race': ''
-}
-
 def start():
     print('Insert exposition here.')
     while True:
@@ -46,8 +33,20 @@ def start():
 
 
 def input_parse(user_input):
+    global current_targets
+    current_targets = []
     test_command = user_input.lower().split()[0]
-    print(valid_command(test_command))
+    try:
+        valid_functions[valid_command(test_command)]()
+    except:
+        pass
+    valid_targets(user_input.lower().split()[1:])
+    print(current_targets)
+
+def valid_targets(test_targets):
+    for words in test_targets:
+        if words in all_targets:
+            current_targets.append(words)
 
 def valid_command(test_command):
     for command in valid_commands:
@@ -58,7 +57,7 @@ def valid_command(test_command):
 
 
 def fire_weapon_check():
-    print('weapon check')
+    print('shoot')
 
 def fire_laser():
     print('laser')
@@ -72,10 +71,26 @@ def sector_jump():
 def power_management():
     print('power')
 
+all_targets = ('map','enemy','bag')
+
 valid_functions = {
     'shoot': fire_weapon_check,
     'laser': fire_laser,
     'missile': fire_missile,
     'warp': sector_jump,
     'power': power_management
+}
+valid_commands = {
+    'shoot': ('shoot', 'fire', 'gun'),
+    'laser': ('laser','zap'),
+    'missile': ('missile','explode'),
+    'warp': ('warp','jump'),
+    'power': ('power','management','redirect','divert','reroute')
+}
+
+player_data = {
+    'name': '',
+    'race': '',
+    'missiles': 10,
+    'ship_health': 100
 }
