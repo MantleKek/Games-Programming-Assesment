@@ -17,13 +17,7 @@ valid_commands = {
     'warp': ('warp','jump'),
     'power': ('power','management','redirect','divert','reroute')
 }
-"""valid_functions = {
-    'shoot': fire_weapon_check,
-    'laser': fire_laser,
-    'missile': fire_missile,
-    'warp': sector_jump,
-    'power': power_management
-}"""
+
 player_data = {
     'name': '',
     'race': ''
@@ -53,16 +47,35 @@ def start():
 
 def input_parse(user_input):
     test_command = user_input.lower().split()[0]
-    if valid_command(test_command):
-        valid_functions[test_command](input('this is working: '))
+    print(valid_command(test_command))
 
 def valid_command(test_command):
-    for commands in valid_commands:
-        if test_command in commands:
-            return True
-        """for subcommands in commands:
-            if test_command in subcommands:
-                return test_command"""
-def walk(dir):
-    print(dir + 'a')
+    for command in valid_commands:
+        for counter in range(len(valid_commands[command])):
+            if test_command == valid_commands[command][counter]:
+                return command
+    print('Sorry I do not understand what '+test_command+' is, please try again.')
 
+
+def fire_weapon_check():
+    print('weapon check')
+
+def fire_laser():
+    print('laser')
+
+def fire_missile():
+    print('missile')
+
+def sector_jump():
+    print('warp')
+
+def power_management():
+    print('power')
+
+valid_functions = {
+    'shoot': fire_weapon_check,
+    'laser': fire_laser,
+    'missile': fire_missile,
+    'warp': sector_jump,
+    'power': power_management
+}
