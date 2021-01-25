@@ -1,12 +1,12 @@
 import plain
 
 
-plain.start()
-print(plain.player_data)
+#plain.start()
+#print(plain.player_data)
 
-plain.input_parse(input('Test: '))
 
-world_data = {
+
+sec1_data = {
     '1': fedhq,
     '2': business,
     '3': sec1_solarflare,
@@ -20,6 +20,9 @@ world_data = {
     '11': exit_beacon
 }
 
+while True:
+    plain.input_parse(input('What would you like to do? '))
+
 def fedhq():
     valid_targets = None
     valid_warps = (2)
@@ -29,6 +32,9 @@ def business():
     valid_warps = (1,3)
 
 def sec1_solarflare():
+    print('You arrive at the beacon and realise the entire area is engulfed in a solar storm.\nA solar flare strikes your ship and you decide to make a hasty escape (-20 health)')
+    plain.player_data['ship_health'] -= 20
+    plain.sector_warp(4)
     #-20 health and warp them back.
 
 def sec1_fedscout1():
@@ -38,6 +44,7 @@ def sec1_fedscout1():
         plain.player_data['inventory'].remove('id')
         #First encounter
     else:
+        print('welcome back')
         #Coming back
 
 def sec1_distress1():
@@ -82,7 +89,8 @@ def sec1_boss():
 
 def exit_beacon():
     valid_targets = None
-    valid_warps = 10
+    valid_warps = (10,'sector 2')
+    #Text to end game
 
 
 
