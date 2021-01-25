@@ -9,6 +9,7 @@ WANT:
 Map random generation
 
 """
+import time
 
 def start():
     print('Insert exposition here.')
@@ -40,10 +41,10 @@ def input_parse(user_input):
         valid_functions[valid_command(test_command)]()
     except:
         pass
-    valid_targets(user_input.lower().split()[1:])
+    valid_target(user_input.lower().split()[1:])
     print(current_targets)
 
-def valid_targets(test_targets):
+def valid_target(test_targets):
     for words in test_targets:
         if words in all_targets:
             current_targets.append(words)
@@ -62,35 +63,56 @@ def fire_weapon_check():
 def fire_laser():
     print('laser')
 
-def fire_missile():
-    print('missile')
+def fire_rocket():
+    print('rocket')
 
 def sector_jump():
     print('warp')
 
+def talk():
+    print('talk')
+
 def power_management():
     print('power')
 
-all_targets = ('map','enemy','bag')
+def status_check():
+    print('status check')
+
+all_targets = {
+    'id': None,
+    'davey': ('talk')
+    'rebel': ('shoot'),
+    'mechanic': ('talk'),
+    'shopkeeper': ('talk')
+    'cruiser': ('talk','shoot')
+}
+
 
 valid_functions = {
     'shoot': fire_weapon_check,
-    'laser': fire_laser,
-    'missile': fire_missile,
     'warp': sector_jump,
-    'power': power_management
+    'talk': talk,
+    'power': power_management,
+    'status': status_check
 }
 valid_commands = {
     'shoot': ('shoot', 'fire', 'gun'),
-    'laser': ('laser','zap'),
-    'missile': ('missile','explode'),
     'warp': ('warp','jump'),
-    'power': ('power','management','redirect','divert','reroute')
+    'talk': ('talk','speak','chat'),
+    'power': ('power','management','redirect','divert','reroute'),
+    'status': ('status','ship')
 }
 
 player_data = {
     'name': '',
     'race': '',
-    'missiles': 10,
+    'rockets': 10,
     'ship_health': 100
+    'credits': 30
+    'fuel': 10
+    'inventory': ['id']
+}
+sec1_data = {
+    'rebel_scout_defeated': False
+    'boss_defeated': False
 }
