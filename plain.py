@@ -36,36 +36,32 @@ def start():
 def input_parse(user_input):
     global current_targets, raw_input
     raw_input = user_input
-    current_targets = []
+    current_targets = ''
     test_command = user_input.lower().split()[0]
     try:
         valid_functions[valid_command(test_command)]()
     except:
         pass
-    valid_target(user_input.lower().split()[1:])
-    if command_on_target(test_command,current_targets):
-        valid_functions[test_command](current_targets)
+    current_targets = valid_target(user_input.lower().split()[1:])
+    if current_targets:
+        if command_on_target(test_command,current_targets):
+            valid_functions[test_command](current_targets)
+    else:
+        print('You can not do that.')
 
 
 def command_on_target(command,target):
     if command in all_targets[target]:
         return True
     else:
-        print('You cannot '+command+' on the '+target+'.')
+        print('You can not '+command+' on the '+target+'.')
         return False
 
 def valid_target(test_targets):
     global current_targets
-    for words in test_targets:
-        if words in all_targets:
-            current_targets.append(words)
-    if len(current_targets)>1:
-        current_targets = []
-        print('Please only input one target.')
-    else:
-        temp = ''
-        current_targets = temp.join(current_targets)
-        return current_targets
+    for word in test_targets:
+        if word in all_targets:
+            return word
 
 def valid_command(test_command):
     for command in valid_commands:
@@ -77,10 +73,8 @@ def valid_command(test_command):
 def checkup():
     if player_data['ship_health'] <= 0:
         print('Your ship has run out of health and you have died.')
-        break
     if player_data['fuel'] <= 0:
         print('Your ship has run out of fuel and you have died.')
-        break
 
 def fire_weapon_check():
     print('shoot')
@@ -91,8 +85,22 @@ def fire_laser():
 def fire_rocket():
     print('rocket')
 
-def sector_warp(beacon):
-    print('bruh')
+def beacon_warp(beacon):
+    print(beacon)
+    if beacon == 'exit' or 'sector':
+        sector_exit()
+    try:
+        beacon = int(beacon)
+    except ValueError:
+        print('This is not a valid beacon to warp to.')
+    if beacon in sec1_warps[player_data['beacon']]:
+        player_data['beacon'] = beacon
+    else:
+        print('You can not warp to that location.')
+    print(player_data['beacon'])
+
+def sector_exit():
+    print('Sector exit')
 
 def talk():
     print('talk')
@@ -111,13 +119,23 @@ all_targets = {
     'shopkeeper': ('talk'),
     'cruiser': ('talk','shoot'),
     'exit': ('exit','gate'),
-    'wrecked ship': ('wrecked','ship','wreck')
+    'wrecked ship': ('wrecked','ship','wreck'),
+    '1': ('warp'),
+    '2': ('warp'),
+    '3': ('warp'),
+    '4': ('warp'),
+    '5': ('warp'),
+    '6': ('warp'),
+    '7': ('warp'),
+    '8': ('warp'),
+    '9': ('warp'),
+    '10': ('warp')
 }
 
 
 valid_functions = {
     'shoot': fire_weapon_check,
-    'warp': sector_warp,
+    'warp': beacon_warp,
     'talk': talk,
     'power': power_management,
     'status': status_check

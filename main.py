@@ -6,22 +6,9 @@ import plain
 
 
 
-sec1_data = {
-    '1': fedhq,
-    '2': business,
-    '3': sec1_solarflare,
-    '4': sec1_fedscout1,
-    '5': sec1_distress1,
-    '6': sec1_fedscout2,
-    '7': sec1_distress2,
-    '8': sec1_goods,
-    '9': sec1_repair,
-    '10': sec1_boss,
-    '11': exit_beacon
-}
 
 while True:
-    plain.input_parse(input('What would you like to do? '))
+    plain.input_parse(input('\nWhat would you like to do? '))
 
 def fedhq():
     valid_targets = None
@@ -93,6 +80,19 @@ def exit_beacon():
     #Text to end game
 
 
+sec1_data = {
+    '1': fedhq,
+    '2': business,
+    '3': sec1_solarflare,
+    '4': sec1_fedscout1,
+    '5': sec1_distress1,
+    '6': sec1_fedscout2,
+    '7': sec1_distress2,
+    '8': sec1_goods,
+    '9': sec1_repair,
+    '10': sec1_boss,
+    '11': exit_beacon
+}
 
 """
 
