@@ -7,21 +7,28 @@ import plain
 
 
 
-while True:
-    plain.input_parse(input('\nWhat would you like to do? '))
+
 
 def fedhq():
     valid_targets = None
     valid_warps = (2)
+    print('\nWell this is it, your big job; You have been running parcels for years and finally you are going to get yourself a good payday. '
+          "because this isn't just any client, this is the federation. \nUpon seeing the meagre cargo a 4 boxes you are intrigued.\n"
+          "'Why spend this much money on just a few boxes?'\nYou know better than to question the federation, even if these suspicious boxes are being delivered "
+          "directly into rebel territory, and hey, it's still the best payday you have ever had;\n100,000 credits, and you can even keep "
+          "the missile launcher they gave you for protection. An absolute no brainer of a job you think.")
+    print("Just before you leave a mantis bureaucrat runs up to you: 'Hey, sorry, I nearly forgot to give you this!' he says as he hands you a federation id pass. You nod in thanks and head on your way.")
+    plain.beacon_warp_info()
 
 def business():
     valid_targets = 'davey'
     valid_warps = (1,3)
+    print("\nYou warp to the second beacon, just a few seconds from your business, you decide to quickly pop in just before you set off.\nInside you find only Davey, the happy go lucky rockperson.")
 
 def sec1_solarflare():
-    print('You arrive at the beacon and realise the entire area is engulfed in a solar storm.\nA solar flare strikes your ship and you decide to make a hasty escape (-20 health)')
+    print('\nYou arrive at the beacon and realise the entire area is engulfed in a solar storm.\nA solar flare strikes your ship and you decide to make a hasty escape (-20 health)')
     plain.player_data['ship_health'] -= 20
-    plain.sector_warp(4)
+    plain.beacon_warp(4)
     #-20 health and warp them back.
 
 def sec1_fedscout1():
@@ -93,6 +100,20 @@ sec1_data = {
     '10': sec1_boss,
     '11': exit_beacon
 }
+
+while True:
+    try:
+        plain.checkup()
+        sec1_data[plain.player_data['beacon']]()
+        plain.input_parse(input('\nWhat would you like to do? '))
+    except IndexError:
+        pass
+    except ZeroDivisionError:
+        print('Your ship has run out of health and you have died.')
+        break
+    except IsADirectoryError:
+        print('Your ship has run out of fuel and you have died.')
+        break
 
 """
 
