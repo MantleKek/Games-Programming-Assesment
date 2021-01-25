@@ -80,20 +80,39 @@ def checkup():
     if player_data['fuel'] <= 0:
         raise IsADirectoryError
 
+
 def fire_weapon_check():
-    print('shoot')
+    if input('Fire a laser shot or a rocket? ').lower()[0] == 'l':
+        fire_laser(combat_unit)
+    elif input('Fire a laser shot or a rocket? ').lower()[0] == 'r':
+        if player_data['rockets'] >= 1:
+            fire_rocket(combat_unit)
+        else:
+            print('No rockets remaining.')
+    else:
+        fire_weapon_check()
 
-def fire_laser():
-    print('laser')
+def fire_laser(target):
+    laser_base_dmg = 9
+    laser_dmg = laser_base_dmg + randint(-2,2)
+    target['health'] -= laser_dmg
+    print('%s hit for %d damage.'%(target,laser_dmg))
 
-def fire_rocket():
-    print('rocket')
+def fire_rocket(target):
+    rocket_base_dmg = 18
+    rocket_dmg = rocket_base_dmg + randint(-5,5)
+    player_data['rockets'] -= 1
+    if randint(0,1) == 0:
+        target['health'] -= rocket_dmg
+        print('%s hit for %d damage.'%(target,rocket_dmg))
+    else:
+        print('The rocket missed...')
 
 def combat_start(unit):
     global combat_unit
     combat_unit = unit
+    combat_unit_health = unit['health']
     player_data['in_combat'] = True
-    unit['health']
 
 def beacon_warp(beacon):
     if player_data['beacon'] == '11'and beacon == 'exit':

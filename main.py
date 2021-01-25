@@ -1,9 +1,6 @@
 import plain
 from time import time
 
-
-#plain.start()
-
 def fedhq():
     valid_targets = None
     valid_warps = (2)
@@ -127,6 +124,8 @@ sec1_data = {
     '11': exit_beacon
 }
 
+#Main Loop
+#plain.start()
 while True:
     try:
         plain.checkup()
