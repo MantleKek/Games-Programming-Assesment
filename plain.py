@@ -9,7 +9,7 @@ WANT:
 Map random generation
 
 """
-import time,random
+from random import randint
 
 def start():
     print('Insert exposition here.')
@@ -89,32 +89,63 @@ def fire_laser():
 def fire_rocket():
     print('rocket')
 
+def combat_start(unit):
+    global combat_unit
+    combat_unit = unit
+    player_data['in_combat'] = True
+    unit['health']
+
 def beacon_warp(beacon):
     if player_data['beacon'] == '11'and beacon == 'exit':
         sector_exit()
+        return None
+    if player_data['in_combat'] == True:
+        print('You can not warp out of combat')
+        return None
     try:
         int(beacon)
     except ValueError:
         print('This is not a valid beacon to warp to.')
     if beacon in sec1_warps[str(player_data['beacon'])]:
         player_data['beacon'] = beacon
+        player_data['fuel'] -= 1
     else:
         print('You can not warp to that location.')
 
 def beacon_warp_info():
     cur_beacon = player_data['beacon']
     print('You are at beacon '+cur_beacon)
-    print('From here you can warp to beacon(s) ' + sec1_warps[cur_beacon])
+    print('From here you can warp to beacon(s) ',sec1_warps[cur_beacon])
 
-def sector_exit():
-    print('Sector exit')
+def sector_exit(waffle):
+    print('You exit the sector. Ending the game for now.')
     #Endgame text for now
 
 def talk(target):
     print(talk_targets[target])
 
+def repair(amount):
+    while True:
+        if amount is None:
+            amount = input('How much damage would you like to repair (current health: %d'%(player_data['ship_health']))
+        else:
+            break
+        try:
+            amount = int(amount)
+        except ValueError:
+            print('Please give a valid value. ')
+    if amount > player_data['credits']:
+        print('You cannot afford that, you only have %d credits.'%(player_data['credits']))
+    else:
+        print('You have fixed %d damage.'%(amount))
+        player_data['credits']-=amount
+        player_data['ship_health'] += amount
+
 def status_check():
-    print('status check')
+    print('Ship Health: ',player_data['ship_health'])
+    print('Credits: ',player_data['credits'])
+    print('Fuel: ',player_data['fuel'])
+    print('Missiles: ',player_data['rockets'])
 
 def help():
     print('Available commands are: ')
@@ -125,7 +156,7 @@ all_targets = {
     'id': None,
     'davey': ('talk'),
     'rebel': ('shoot'),
-    'mechanic': ('talk'),
+    'mechanic': ('talk','repair'),
     'shopkeeper': ('talk'),
     'cruiser': ('talk','shoot'),
     'exit': ('exit','gate','warp'),
@@ -140,30 +171,28 @@ all_targets = {
     '8': ('warp'),
     '9': ('warp'),
     '10': ('warp'),
-    '11': ('warp','exit')
-}
-talk_targets = {
-    'davey': "Gee boss, good luck on your next delivery; I'm sure you'll do just great!",
-    'mechanic': ' ',
-    'shopkeep': ' ',
-    'cruiser': 'Stop talking and show us your id, or we will open fire.\nUpon realising that you id was lost during your prior meeting with the federation you begin to panic.\nSensing the tension in your voice you hear the captain yell "Enough of this, kill the rebel scum" shortly followed up by a missile that narrowly misses the ship.'
+    '11': ('warp','sector')
 }
 valid_functions = {
     'shoot': fire_weapon_check,
     'warp': beacon_warp,
     'talk': talk,
     'help': help,
-    'status': status_check
+    'status': status_check,
+    'repair': repair,
+    'sector': sector_exit
 }
 valid_commands = {
-    'shoot': ('shoot', 'fire', 'gun'),
+    'shoot': ('shoot', 'fire', 'gun','attack'),
     'warp': ('warp','jump'),
     'talk': ('talk','speak','chat'),
     'help': ('help'),
-    'status': ('status','ship')
+    'status': ('status','ship'),
+    'repair': ('repair','fix'),
+    'sector': ('exit','sector')
 }
 player_data = {
-    'name': '',
+    'name': 'Default',
     'race': '',
     'rockets': 10,
     'ship_health': 100,
@@ -173,6 +202,13 @@ player_data = {
     'beacon': '1',
     'sector': 1,
     'in_combat': False
+}
+talk_targets = {
+    'davey': "Gee boss, good luck on your next delivery; I'm sure you'll do just great!",
+    'mechanic': "'Pleasure to meet ya! The names Jim, whats yours?'\nYou introduce yourself to Jim\n'Well %s do yer need me to work some wonders on that rust bucket there?'"%(player_data['name']),
+    'shopkeeper': 'Hello dear and welcome to my humble shop, sadly I have a shortage of supply right now, this bloody war is taking its toll.\n'
+                'Your ship looks quite a state! You should bring it over to beacon 9, best mechanic in the galaxy.',
+    'cruiser': 'Stop talking and show us your id, or we will open fire.\nUpon realising that you id was lost during your prior meeting with the federation you begin to panic.\nSensing the tension in your voice you hear the captain yell "Enough of this, kill the rebel scum" shortly followed up by a missile that narrowly misses the ship.'
 }
 sec1_data = {
     'rebel_scout_defeated': False,
@@ -197,10 +233,24 @@ sec1_warps = {
     '3': ('2','4'),
     '4': ('2','3','6'),
     '5': ('6','7'),
-    '6': ('5','8'),
+    '6': ('4','5','8'),
     '7': ('5'),
     '8': ('6','9','10'),
     '9': ('8'),
     '10': ('8','11'),
-    '11': ('10','exit','sector')
+    '11': ('10','sector')
+}
+sec1_shop = {
+    'fuel': 10,
+    'missile': 8
+}
+rebel_scout = {
+    'health': 30,
+    'base_dmg': 7,
+    'var': 2
+}
+fed_cruiser = {
+    'health': 50,
+    'base_dmg': 12,
+    'var':4
 }
